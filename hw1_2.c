@@ -1,4 +1,4 @@
-# 21800409 Jiyoung Shin
+// 21800409 Jiyoung Shin
 
 #include <stdio.h>
 
