@@ -3,13 +3,13 @@
 #include <stdio.h>
 
 int main (){
-    int x,y;
+    int x,y,k;
 
     //scan the input file
     int input[9][9];
     char c;
-    for (int y = 0 ; y < 9 ; y++){
-        for ( int x=0 ; x < 9 ; x++){
+    for (y = 0 ; y < 9 ; y++){
+        for ( x=0 ; x < 9 ; x++){
             scanf("%c ",&c);
 
             if(c=='?') input[y][x] = 0;
@@ -46,7 +46,7 @@ int main (){
         fprintf(fp, "(assert (and (<= 1 a%d%d) (<= a%d%d 9)))\n",y,x,y,x);
 
     // Q2 : Every row has only one every value.
-    for (int k = 1 ; k <=9 ; k++){
+    for (k = 1 ; k <=9 ; k++){
         for (y = 1 ; y <= 9 ; y++) {
             fprintf(fp,"(assert (= (+ ");
             for (x =1 ; x <= 9 ; x++){
@@ -57,7 +57,7 @@ int main (){
     }
 
     // Q3 : Every column has only one every value.
-    for (int k = 1 ; k <=9 ; k++){
+    for (k = 1 ; k <=9 ; k++){
         for (x = 1 ; x <= 9 ; x++) {
             fprintf(fp,"(assert (= (+ ");
             for (y =1 ; y <= 9 ; y++){
@@ -71,7 +71,7 @@ int main (){
     for(int m = 0 ; m < 9 ; m+=3){
         for(int n = 0 ; n < 9 ; n+=3){
 
-            for (int k = 1 ; k <=9 ; k++){
+            for (k = 1 ; k <=9 ; k++){
                 fprintf(fp,"(assert (= (+ ");
                 for (y = m+1 ; y <= m+3 ; y++){
                     for (x = n+1 ; x <= n+3 ; x++) {
@@ -94,7 +94,7 @@ int main (){
         fprintf(fp,"Q5\n");
     #endif
 
-    for (int k = 1 ; k <= 9 ; k++){
+    for (k = 1 ; k <= 9 ; k++){
         fprintf(fp,"(assert (<= (+ \n");
         for (y = 1 ; y <= 9 ; y++) {
             for (x = 1 ; x <= 9 ; x++){
