@@ -7,11 +7,18 @@ int main ()
 {
 	int i, j, k;
 
+    char a[128] ;
 	char b[128] ;
 	char s[128] ;
 	char t[128] ;
 
-	scanf("%s %s", b, b) ;
+	scanf("%s %s", a, b) ;
+    if (!strcmp(a,"unsat")) {
+        printf("No Solution!\n");
+        return 0;
+    }
+    else printf("Solution exists!\n");
+
 	for (k = 0 ; k < 81 ; k++) {
 		scanf("%s %s %s %s %s", b, s, b, b, t) ;
 
