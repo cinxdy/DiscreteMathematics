@@ -2,8 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define N 6
-#define M 6
+#define N 5
+#define M 5
 
 char board[N][M] ;
 
