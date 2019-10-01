@@ -1,23 +1,48 @@
 // 21800409 Jiyoung Shin
 
 #include <stdio.h>
-#define N 5
-#define M 5
+// #define N 5
+// #define M 5
+#define T 5
 
 int main (){
     int x,y,k;
 
     // scan the input file
-    int input[N][M];
+    int N = 0, M = 0;
+    int** input;
+    int arr[4096];
+    int arr_cnt = 0;
     char c;
 
-    for (y = 0 ; y < N ; y++){
-        for ( x = 0 ; x < M ; x++){
-            scanf("%c ",&c);
+    while(!feof(stdin)) {
+	char ch;
+	scanf("%c",&ch);
+		if(ch >= '0' && ch <= '9') {
+			arr[arr_cnt] = ch - '0';
+			arr_cnt ++;
+		} else if(ch == '?') {
+			arr[arr_cnt] = 0;
+			arr_cnt ++;
+		} else if(ch == '\n') {
+			N++;
+		}
+    }
+    N--;
+    M = arr_cnt / N;
+    input = (int**) malloc(sizeof(int*)*N);
+    for(int i = 0; i < N; i++) {
+	input[i] = (int*) malloc(sizeof(int)*M);
+    }
 
-            if(c=='?') input[y][x] = 0;
-            else input[y][x] = c - '0';
-        }
+
+    for(int i = 0; i < arr_cnt; i++) {
+
+
+	int quo, remain;
+	quo = i / M;
+	remain = i % M;
+	input[quo][remain] = arr[i];
     }
 
     // write formula

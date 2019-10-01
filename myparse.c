@@ -34,7 +34,7 @@ int main ()
 		gets(b); // error message absort
 		printf("No solution\n");
 	} else if(strcmp("sat",satis) == 0) {
-		printf("sat!\n");
+//		printf("sat!\n");
 
 		gets(b); // get-model
 
