@@ -1,9 +1,18 @@
 # DiscreteMathematics . 
 
 # How to build?
+<pre><code>
+make p1
+make p2
+make p3
+</code></pre>
+
+or
+<pre><code>
 gcc p1.c -o p1.out<br>
 gcc p2.c -o p2.out<br>
 gcc p3.c -o p3.out<br>
+</code></pre>
 
 # Execution example
 ## P1
