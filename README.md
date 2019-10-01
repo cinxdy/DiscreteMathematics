@@ -1,9 +1,9 @@
 # DiscreteMathematics . 
 
 # How to build?
-gcc p1.c -o p1.out 
-gcc p2.c -o p2.out  
-gcc p3.c -o p3.out
+gcc p1.c -o p1.out<br>
+gcc p2.c -o p2.out<br>
+gcc p3.c -o p3.out<br>
 
 # Execution example
 ## P1
