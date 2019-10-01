@@ -21,7 +21,8 @@ int main ()
         printf("No Solution!\n");
         return 0;
     }
-    else printf("Solution exists!\n");
+    else 
+	printf("Solution exists!\n");
 
 	for (k = 0 ; k < N*M ; k++) {
 		scanf("%s %s %s %s %s", b, s, b, b, t) ;
