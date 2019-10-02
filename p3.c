@@ -1,54 +1,19 @@
-// 21800409 Jiyoung Shin
-// 21700613 SB
+// p3.c
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <stdlib.h>
+#include "pset.h"
 
-int board[101][101];
-
-int N, M;
-void print_board();
-bool z3();
 int main (){
     int x,y,k;
+    int N = 0;
+    int M = 0;
 
-// scan the input file
-    int** input;
-    int arr[4096];
-    int arr_cnt = 0;
-    char c;
-    N = 1; M = 0;
-    while(!feof(stdin)) {
-	char ch[128];
-	scanf("%s",ch);
-		if(strcmp("?",ch) == 0) {
-			arr[arr_cnt] = 0;
-			arr_cnt ++;
-		} else {
-			arr[arr_cnt] = atoi(ch);
-			arr_cnt ++;
-		}
-	if(getchar() == '\n') N++;
-    }
-    M = arr_cnt / N;
+    // Scan the input file
+    int** input = read_input(&N,&M);
 
-    input = (int**) malloc(sizeof(int*)*N);
-    for(int i = 0; i < N; i++) {
-	input[i] = (int*) malloc(sizeof(int)*M);
-    }
-
-    for(int i = 0; i < arr_cnt; i++) {
-	int quo, remain;
-	quo = i / M;
-	remain = i % M;
-	input[quo][remain] = arr[i];
-    }
-
-
-    // write formula
+    // Write the formula
 	FILE * fp = fopen("formula", "w") ;
 
+    // Declare the variables
 	for (y = 1 ; y <= N ; y++)
 		for (x = 1 ; x <= M ; x++)
 			fprintf(fp, "(declare-const a%d_%d Int)\n", y, x) ;
@@ -64,8 +29,7 @@ int main (){
         for (x = 1 ; x <= M ; x++)
         fprintf(fp, "(assert (and (<= 1 a%d_%d) (<= a%d_%d %d)))\n",y,x,y,x,N*M);
 
-    
-    // Q2 : like snake
+    // Q2 : a(i,j)-1 exists among the neighbors.
     for (y = 1 ; y <= N ; y++){
         for (x = 1 ; x <= M ; x++){
             fprintf(fp, "(assert (or \n");
@@ -82,6 +46,7 @@ int main (){
         }
     }
 
+    // Q3 : a(i,j)+1 exists among the neighbors.
     for (y = 1 ; y <= N ; y++){
         for (x = 1 ; x <= M ; x++){
             fprintf(fp, "(assert (or \n");
@@ -98,7 +63,7 @@ int main (){
         }
     }
 
-    // Q3 : Every row and column has only one every value.
+    // Q4 : Every row and column has only one every value.
     for (k = 1 ; k <= N*M ; k++){
         fprintf(fp,"(assert (= (+ ");
         for (y = 1 ; y <= N ; y++) 
@@ -109,51 +74,13 @@ int main (){
     }
 
     fprintf(fp, "(check-sat)\n(get-model)\n") ;
-    
 	fclose(fp) ;
-	
-	if(z3()) print_board();
-}
-bool z3() {
-    int i, j, k;
-    char satis[128];
-    char a[128] ;
-    char b[128] ;
-    char s[128] ;
-    char t[128] ;
 
-	FILE * fin = popen("z3 formula", "r");
 
-	while(!feof(fin)) {
-    		fscanf(fin,"%s",satis);
-		if(strcmp("unsat",satis) == 0) {
-			fscanf(fin,"%s",b); // error message absort
-			printf("No solution\n");
-			return false;
-		} else if(strcmp("sat",satis) == 0) {
-			fscanf(fin,"%s",b); // error message absort
-			while(1) {
+	// Execute Z3 and print the result
+    int** board = (int**) malloc(sizeof(int*)*N);
+    for(int i = 0; i < N; i++)
+	    board[i] = (int*) malloc(sizeof(int)*M);
 
-				int val, col, row;
-
-				fscanf(fin,"%s", a) ;
-				if(strcmp(")",a) == 0) break;
-				fscanf(fin," a%d_%d %s %s %s", &col,&row, b, b, t) ;
-
-				t[strlen(t)-1] = 0x0;
-				val = atoi(t);
-				board[col-1][row-1] = val;		
-			}
-		}
-	}
-	return true;
-}
-void print_board() {
-	for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				printf("%d ",board[i][j]);
-			}
-			printf("\n");
-		}
-	printf("\n");
+	if(z3(N,M,board)) print_board(N,M,board);
 }

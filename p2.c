@@ -1,11 +1,5 @@
-// 21800409 Jiyoung Shin
-// 21700613 SB
+// p2.c
 
-#include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
-// #define N 5
-// #define M 5
 #define T 5
 int board[T][1001][1001];
 
@@ -15,39 +9,12 @@ int formula(int tt, int** input);
 int N, M;
 int main (){
     int x,y,k;
+	int N = 0;
+    int M = 0;
 
-    // scan the input file
-    int** input;
-    int arr[4096];
-    int arr_cnt = 0;
-    char c;
-    N = 0; M = 0;
-    while(!feof(stdin)) {
-	char ch;
-	scanf("%c",&ch);
-		if(ch >= '0' && ch <= '9') {
-			arr[arr_cnt] = ch - '0';
-			arr_cnt ++;
-		} else if(ch == '?') {
-			arr[arr_cnt] = 0;
-			arr_cnt ++;
-		} else if(ch == '\n') {
-			N++;
-		}
-    }
-    N--;
-    M = arr_cnt / N;
-    input = (int**) malloc(sizeof(int*)*N);
-    for(int i = 0; i < N; i++) {
-	input[i] = (int*) malloc(sizeof(int)*M);
-    }
+    // Scan the input file
+    int** input = read_input(&N,&M);
 
-    for(int i = 0; i < arr_cnt; i++) {
-	int quo, remain;
-	quo = i / M;
-	remain = i % M;
-	input[quo][remain] = arr[i];
-    }
     int tt;
     for(tt = 0; tt < 5; tt ++) {
 
@@ -63,10 +30,11 @@ int main (){
 }    
 
 
-    // check Satisfiable and get model
+// check Satisfiable and get model
 int formula(int tt, int** input) {
     int x,y,k;
-    // write formula
+
+    // Write the formula
 	FILE * fp = fopen("formula", "w") ;
 	for (y = 1 ; y <= N ; y++)
 		for (x = 1 ; x <= M ; x++)
@@ -92,6 +60,7 @@ int formula(int tt, int** input) {
             }
         }
     }
+
     // Q1 : never print same answer again
     for(int t = 0; t < tt; t++) {
 
@@ -110,6 +79,7 @@ int formula(int tt, int** input) {
     fclose(fp);
     return z3(tt);
 }
+
 bool z3(int tt) {
     int i, j, k;
     char satis[128];
