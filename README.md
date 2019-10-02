@@ -1,11 +1,80 @@
-# DiscreteMathematics . 
+# DiscreteMathematics Assignment 1  
 
-# Execution . 
-gcc hw1.c -o hw .  
-gcc hw2.c -o hw .     
-gcc hw3.c -o hw .   
-gcc parse.c -o parse .   
+## Problem Set  
+p1 : Sudoku *  
+p2 : Fill-a-Pix  
+p3 : Numbrix  
 
-./hw < input.txt .   
-z3 formula > solution .   
-./parse < solution .   
+## How to build?
+<pre><code>
+make p1  
+make p2  
+make p3  
+</code></pre>
+or
+<pre><code>
+gcc p1.c -o p1.out  
+gcc p2.c -o p2.out  
+gcc p3.c -o p3.out  
+</code></pre>
+
+## How to execute?
+<pre><code>
+./p1.out < input.txt  
+./p2.out < input.txt  
+./p3.out < input.txt  
+</code></pre>
+
+## Execution example
+### P1
+<pre><code>
+  <blockquote>
+    <p>./p1.out
+? 2 ? 5 ? * ? 9 ?
+8 ? ? 2 ? 3 ? ? 6
+? 3 ? ? 6 ? * 7 ?
+* ? ? ? * ? 6 ? ?
+5 4 ? ? ? ? ? 1 9
+? ? 2 ? ? ? 7 ? ?
+? 9 * ? 3 ? ? 8 ?
+2 ? ? 8 ? 4 ? * 7
+? 1 ? 9 ? 7 ? 6 ?</p>
+  </blockquote>
+</code></pre>
+
+### P2
+<pre><code>
+  <blockquote>
+    <p>./p2.out
+? ? ? ? ?
+? 9 ? ? ?
+? 8 8 ? ?
+? ? ? ? 4
+4 ? 5 ? 2</p>
+  </blockquote>
+</code></pre>
+
+
+### P3
+<pre><code>
+  <blockquote>
+    <p>./p3.out
+? ? ? ? ? ?
+? ? 20 13 ? ?
+? 26 ? ? 9 ?
+? 25 ? ? 10 ?
+? ? 23 36 ? ?</p>
+  </blockquote>
+</code></pre>
+
+<pre><code>
+  <blockquote>
+    <p>./p3.out
+? ? ? ? ? ?
+? ? ? ? ? ?
+? ? ? ? ? ?
+? ? ? ? ? ?
+? ? ? ? ? ?
+? ? ? ? ? ?</p>
+  </blockquote>
+</code></pre>

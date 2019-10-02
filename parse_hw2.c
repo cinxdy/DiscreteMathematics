@@ -16,13 +16,19 @@ int main ()
 	char s[128] ;
 	char t[128] ;
 
-	scanf("%s %s", a, b) ;
-    if (!strcmp(a,"unsat")) {
-        printf("No Solution!\n");
-        return 0;
+    count = 0;
+    while(1){
+        scanf("%s",a);
+        if(!strcmp(a,"sat") && count<5) break;
+        count ++;
+        while(1){
+            scanf("%s",a);
+        }
     }
-    else 
-	printf("Solution exists!\n");
+
+	scanf("%s", b) ;
+    if(count == 5) printf("Solution doesn't exist!\n");
+    else printf("Solution exists!\n");
 
 	for (k = 0 ; k < N*M ; k++) {
 		scanf("%s %s %s %s %s", b, s, b, b, t) ;
