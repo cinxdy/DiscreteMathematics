@@ -100,29 +100,25 @@ bool z3(int N, int M, int** board) {
 	FILE * fin = popen("z3 formula", "r");
     
 	while(!feof(fin)) {
-        fscanf(fin,"%s",satis);
-        
+
+        // Check satisfying
+    	fscanf(fin,"%s",satis);
 		if(!strcmp("unsat",satis)) {
 			fscanf(fin,"%s",b); // error message absort
-			printf("No solution\n");
 			return false;
-			break;
 		}
         else if(!strcmp("sat",satis)) {
-			fscanf(fin,"%s",b); // model
-			while(1) {
+			fscanf(fin,"%s",b); // get-model message
+			while(true) {
+				int val, col, row;
 
 				fscanf(fin,"%s", a) ;
 				if(!strcmp(")",a)) break;
-				fscanf(fin," %s %s %s %s", s, b, b, t) ;
+				fscanf(fin," a%d_%d %s %s %s", &col,&row, b, b, t) ;
 
-				int val = t[0] - '0';
-				int col = s[1] - '0';
-				int row = s[2] - '0';
-
-                
-                DPrint(printf("DEBUG in z3 %d %d %d %d %d\n",N,M,val,col,row));
-				board[col-1][row-1] = val;
+				t[strlen(t)-1] = 0x0;
+				val = atoi(t);
+				board[col-1][row-1] = val;		
 			}
 		}
 	}

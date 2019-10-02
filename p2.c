@@ -1,37 +1,42 @@
 // p2.c
 
-#define T 5
-int board[T][1001][1001];
+#include "pset.h"
+#define MAX_RESULT 5
 
-void print_board(int tt);
-bool z3(int tt);
-int formula(int tt, int** input);
-int N, M;
+void formula(int turn, int N, int M, int** input,int*** board);
+
 int main (){
     int x,y,k;
-	int N = 0;
-    int M = 0;
+    int N = 0;
+	int M = 0;
 
+	int** board[MAX_RESULT];
     // Scan the input file
     int** input = read_input(&N,&M);
 
-    int tt;
-    for(tt = 0; tt < 5; tt ++) {
+	int turn;
+    for(turn = 0; turn < MAX_RESULT; turn++) {
+		// Make turn-th board [array]
+		board[turn] = (int**) malloc(sizeof(int*)*N);
+		for(int i = 0; i < N; i++)
+			board[turn][i] = (int*) malloc(sizeof(int)*M);
 
-	if(!formula(tt,input)) {
-		break;
-	} else {
-    		print_board(tt);
-	}
+		// Make the formula
+		formula(turn, N, M, input,board);
+
+		// Execute Z3 and get the turn-th solution
+		if(!z3(N,M,board[turn])) break;
+		else print_board(N,M,board[turn]);
     }
-    if(tt == 0) {
-	printf("No solution\n");
-    }
+	
+	// If solution doesn't exist, print No solution
+    if(turn == 0) printf("No solution\n");
 }    
 
-
 // check Satisfiable and get model
-int formula(int tt, int** input) {
+void formula(int turn, int N, int M ,int** input,int*** board) {
+	// DEBUG printf("formula > turn = %d\n",turn);
+
     int x,y,k;
 
     // Write the formula
@@ -40,12 +45,12 @@ int formula(int tt, int** input) {
 		for (x = 1 ; x <= M ; x++)
 			fprintf(fp, "(declare-const a%d_%d Int)\n", y, x) ;
 
-    // 0<= a_yx <=1
+    // Q0 : 0<= a_yx <=1
     for (y = 1 ; y <= N ; y++)
 		for (x = 1 ; x <= M ; x++)
 			fprintf(fp, "(assert (and (<= 0 a%d_%d) (<= a%d_%d 1))) \n", y, x, y, x) ;
 
-    // Q0 : sum of its neighbors is itself (?)
+    // Q1 : The sum of its neighbors is itself
     for (y = 1 ; y <= N ; y++){
         for (x = 1 ; x <= M ; x++){
             if(input[y-1][x-1]>0){
@@ -60,65 +65,35 @@ int formula(int tt, int** input) {
             }
         }
     }
-
-    // Q1 : never print same answer again
-    for(int t = 0; t < tt; t++) {
-
-	fprintf(fp, "(assert (not (and ");
-	for(y = 1 ; y <= N; y++)
-		for(x = 1 ; x <= M ; x++) {
-
-		int v = board[t][y-1][x-1];
-		fprintf(fp,"(= a%d_%d %d) ",y,x,v) ;
-	}
-	fprintf(fp,") )) \n") ;
+	
+    // Q2 : Never print same answer again
+	// Way 1. not(and)
+    for(int t = 0; t < turn; t++) {
+		fprintf(fp, "(assert (not (and ");
+		for(y = 1 ; y <= N; y++)
+			for(x = 1 ; x <= M ; x++) {
+				fprintf(fp,"(= a%d_%d %d) ",y,x,board[t][y-1][x-1]) ;
+			}
+		fprintf(fp,") )) \n") ;
     }
 
-    fprintf(fp, "(check-sat)\n(get-model)\n") ;
-    
-    fclose(fp);
-    return z3(tt);
-}
-
-bool z3(int tt) {
-    int i, j, k;
-    char satis[128];
-    char a[128] ;
-    char b[128] ;
-    char s[128] ;
-    char t[128] ;
-
-	FILE * fin = popen("z3 formula", "r");
-
-	while(!feof(fin)) {
-    		fscanf(fin,"%s",satis);
-		if(strcmp("unsat",satis) == 0) {
-			fscanf(fin,"%s",b); // error message absort
-			return false;
-		} else if(strcmp("sat",satis) == 0) {
-			fscanf(fin,"%s",b); // error message absort
-			while(1) {
-
-				int val, col, row;
-
-				fscanf(fin,"%s", a) ;
-				if(strcmp(")",a) == 0) break;
-				fscanf(fin," a%d_%d %s %s %s", &col,&row, b, b, t) ;
-
-				t[strlen(t)-1] = 0x0;
-				val = atoi(t);
-				board[tt][col-1][row-1] = val;		
+	// Way2. or(distinct)
+	/*
+	fprintf(fp,"(assert (or \n");
+	for(y = 1 ; y <= N; y++){
+		for(x = 1 ; x <= M ; x++) {
+			fprintf(fp, "(distinct a%d_%d ",y,x);
+			for(int t = 0; t < turn; t++){
+				fprintf(fp, "%d",board[t][y-1][x-1]);
 			}
+			fprintf(fp,") \n") ;
 		}
 	}
-	return true;
-}
-void print_board(int tt) {
-	for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				printf("%d ",board[tt][i][j]);
-			}
-			printf("\n");
-		}
-	printf("\n");
+	fprintf(fp,")) \n");
+	*/
+
+    fprintf(fp, "(check-sat)\n(get-model)\n") ;
+    fclose(fp);
+
+	// DEBUG printf("formula < turn = %d\n",turn);
 }

@@ -24,15 +24,19 @@
 
 ## How to build?
 ```
+make
+```
+or
+```
 make p1  
 make p2  
 make p3  
 ```
 or
 ```
-gcc p1.c -o p1.out  
-gcc p2.c -o p2.out  
-gcc p3.c -o p3.out  
+gcc -o p1.out -include pset.h p1.c pset.c  
+gcc -o p2.out -include pset.h p2.c pset.c 
+gcc -o p3.out -include pset.h p3.c pset.c 
 ```
 
 ## How to execute?

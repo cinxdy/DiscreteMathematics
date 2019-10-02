@@ -83,4 +83,5 @@ int main (){
 	    board[i] = (int*) malloc(sizeof(int)*M);
 
 	if(z3(N,M,board)) print_board(N,M,board);
+    else printf("No Solution!\n");
 }
