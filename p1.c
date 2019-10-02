@@ -1,7 +1,11 @@
 // 21800409 Jiyoung Shin
+// 21700613 Sb
 
 #include <stdio.h>
+#include <stdbool.h>
 
+void print_board();
+bool z3();
 int main (){
     int x,y,k;
 
@@ -108,4 +112,51 @@ int main (){
     fprintf(fp, "(check-sat)\n(get-model)\n") ;
     
 	fclose(fp) ;
+
+	if(z3()) print_board();
+}
+int board[10][10];
+bool z3() {
+    int i, j, k;
+    char satis[128];
+    char a[128] ;
+    char b[128] ;
+    char s[128] ;
+    char t[128] ;
+
+	FILE * fin = popen("z3 formula", "r");
+
+	while(!feof(fin)) {
+    		fscanf(fin,"%s",satis);
+		if(strcmp("unsat",satis) == 0) {
+			fscanf(fin,"%s",b); // error message absort
+			printf("No solution\n");
+			return false;
+			break;
+		} else if(strcmp("sat",satis) == 0) {
+			fscanf(fin,"%s",b); // error message absort
+			while(1) {
+
+				fscanf(fin,"%s", a) ;
+				if(strcmp(")",a) == 0) break;
+				fscanf(fin," %s %s %s %s", s, b, b, t) ;
+
+				int val = t[0] - '0';
+				int col = s[1] - '0';
+				int row = s[2] - '0';
+
+				board[col][row] = val;
+			}
+		}
+	}
+	return true;
+}
+void print_board() {
+	for(int i = 1; i <= 9; i++) {
+			for(int j = 1; j <= 9; j++) {
+				printf("%d ",board[i][j]);
+			}
+			printf("\n");
+		}
+	printf("\n");
 }
